@@ -12,7 +12,21 @@ import {
 export const fetchServicesRequest = () => ({
   type: FETCH_SERVICES_REQUEST,
 });
-
+//////////////////////////////////////////////
+export const editService = async (dispatch, id) => {
+  dispatch(fetchServicesRequest())
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/:${id}`)
+    if (!response.ok) {
+      throw new Error(response.statusText)
+    }
+    const data = await response.json()
+    dispatch(fetchServicesSuccess(data))
+  } catch(e) {
+    dispatch(fetchServicesFailure(e))
+  }
+}
+//////////////////////////////////////
 export const fetchServicesFailure = error => ({
   type: FETCH_SERVICES_FAILURE,
   payload: {
@@ -76,20 +90,20 @@ export const fetchServices = async dispatch => {
   }
 }
 
-export const addService = async (dispatch, name, price) => {
-  dispatch(addServiceRequest());
-  try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, price }),
-    })
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    dispatch(addServiceSuccess());
-  } catch (e) {
-    dispatch(addServiceFailure(e.message));
-  }
-  fetchServices(dispatch);
-}
+// export const addService = async (dispatch, name, price) => {
+//   dispatch(addServiceRequest());
+//   try {
+//     const response = await fetch(`${process.env.REACT_APP_API_URL}`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ name, price }),
+//     })
+//     if (!response.ok) {
+//       throw new Error(response.statusText);
+//     }
+//     dispatch(addServiceSuccess());
+//   } catch (e) {
+//     dispatch(addServiceFailure(e.message));
+//   }
+//   fetchServices(dispatch);
+// }
